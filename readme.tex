@@ -1,0 +1,71 @@
+\documentclass[12pt]{article}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{verbatim}
+\usepackage[hmargin=2.5cm,vmargin=3cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.5}
+\usepackage[round]{natbib}
+\usepackage{url}
+\usepackage{doi}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks,
+    linkcolor={blue!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+
+\newcommand{\pathx}{}
+\newcommand{\pathA}{}
+\newcommand{\pathB}{}
+
+\setlength\parindent{0pt}
+
+\begin{document}
+
+\textbf{\Large Replication files for: ``Central Bank Information Effects and Transatlantic Spillovers,'' by Marek Jaroci\'nski}\medskip
+
+
+This Readme file gives an overview of the folder tree and indicates which programs to run in order to replicate the results in the paper. Further instructions are provided within each program.
+
+\section{Folders}
+
+\verb|data| - Source data and Stata and Matlab programs used for the construction of some derived variables, such as interest rate surprises, broad dollar excluding Euro, Europe-exposed stock index etc.
+
+\verb|workm_lp| - Matlab programs that estimate local projections
+
+\verb|workm_var| - Matlab programs that estimate Bayesian VARs.
+
+\section{Replicating the results in the paper}
+
+\subsection{Local projections}
+
+\subsubsection{Macroeconomic surprises and monetary policy shocks obtained with a fixed rotation}
+
+\verb|workm_lp/main.m| - Estimate local projections for macroeconomic surprises and monetary policy shocks obtained with a fixed rotation. Uncomment the lines as explained in the file to estimate different specifications. For example, to replicate Table 1 uncomment:\\
+\verb|shockspec = 'ecb_mpd_me_njt'; % ECB shocks| - to use ECB shocks\\
+\verb|shocktype = 'median';| - to use Median Rotation shocks\\
+\verb|varlist = {'sveny01_d','bund1y_d'};| - to include 1-year Treasury yield (sveny01\_d) and 1-year German Bund yield (bund1y\_d). The variable names are explained in the text file \verb|workm_lp/nicenames_d.json|.
+
+\subsubsection{Monetary policy shocks accounting for the uncertainty about the rotation}
+
+\verb|workm_lp/main2.m| - Estimate local projections for monetary policy shocks accounting for the uncertainty about the rotation. Uncomment the appropriate lines analogously as  in \verb|workm_lp/main.m|.
+
+\subsection{Bayesian VARs}
+
+\verb|workm_var/main.m| - Estimate Bayesian VARs and plot impulse responses to shocks. Define the variables \verb|specid|, \verb|shocksrc| and \verb|shockid| choosing from the options explained in the file. For example, to obtain the impulse responses plotted in Figure 4 use:
+
+\verb|specid = 'us_gdp';| - use the baseline list of variables (the variables are specified below in the program)
+
+\verb|shocksrc = 'ecb';| - use the ECB shocks
+
+\verb|shockid = 'sgnm2';| - use the agnostic sign restrictions as in Jarocinski and Karadi (2020)
+
+%\bibliographystyle{econ}
+%\bibliography{../text/spillovers}
+
+\end{document}

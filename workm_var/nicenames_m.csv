@@ -1,0 +1,26 @@
+id,name,lb,ub
+sveny01_a,1-year Treasury yield,-0.1,0.05
+sveny10_a,10-year Treasury yield,,
+sp500_a,SP500,-2,0.7
+logvix_a,log VIX,,
+usdeur_a,USD per EUR,,
+eurusd_a,EUR per USD,-1,0.7
+broad_usd_a,Broad dollar,,
+broadexea_usd_a,Broad dollar ex EUR,-0.7,0.7
+broad_eur,Broad Euro,,
+bund1y_a,1-year Bund yield,,
+bund10y_a,10-year Bund yield,,
+stoxx50_a,Euro Stoxx 50,,
+bofaml_us_hyld_oas_a,High yield corporate bond OAS (US),-0.3,0.6
+bofaml_ea_hyld_oas_a,High yield corporate bond OAS (EA),,
+vstoxx_a,VSTOXX,,
+logvstoxx_a,log VSTOXX,,
+us_rgdp,Real GDP (US),-0.2,0.1
+ea_rgdp,Real GDP (EA),,
+us_gdpdef,GDP Deflator (US),-0.07,0.04
+ea_gdpdef,GDP Deflator (EA),,
+us_wuxia,US Shadow Rate (Wu-Xia),-0.15,0.1
+ea_wuxia,EA Shadow Rate (Wu-Xia),,
+fedfunds,Fed funds rate,,
+us_krippner,US Shadow Rate (Krippner),,
+ea_krippner,EA Shadow Rate (Krippner),,

@@ -1,0 +1,37 @@
+Variable names:
+
+MP_pm,CBI_pm - Monetary Policy and Central Bank Information shocks obtained
+               with Poor Man's sign restrictions.
+
+MP_median,CBI_median - Monetary Policy and Central Bank Information shocks obtained
+               with the median rotation that implements the sign restrictions.
+
+MP_median,CBI_median - Monetary Policy and Central Bank Information shocks obtained
+               with the median rotation that implements the sign restrictions.
+
+MP_qXX,CBI_qXX - Monetary Policy and Central Bank Information shocks obtained
+               with the percentile XX rotation that implements the sign restrictions.
+
+The variables explained:
+
+For the definition of Monetary Policy and Central Bank Information shocks and the motivation of the sign restrictions see:
+Jarocinski, M. and Karadi, P. (2020) Deconstructing  Monetary Policy Surprises - The Role of Information Shocks, AEJ:Macro, DOI: 10.1257/mac.20180090
+
+The source data for the construction of these variables:
+
+The source data are the financial market "surprises" measured around the times of the ECB monetary policy announcements.
+They come from the Euro Area Monetary Policy Database of  Altavilla et al. (2019). JME
+https://www.ecb.europa.eu/pub/pdf/annex/Dataset_EA-MPD.xlsx
+
+Based on this database we first construct
+pc1eon1_me - the 1st principal component of the Monetary Event- 
+             window changes in overnight index swaps (OIS) with maturities 1-, 
+             3-, 6-months and 1-year (Identifiers: OIS1M, OIS3M, OIS6M, OIS1Y); 
+stoxx50_me - Monetary Event-window changes in the Euro Stoxx 50;
+and based on them we construct the shocks.
+
+The content of the different .csv files:
+
+..._d.csv - daily shocks
+..._m.csv - monthly shocks, sum of the daily shocks in each month (or zero if no shocks in this month)
+..._q.csv - quarterly shocks, sum of the daily shocks in each quarter

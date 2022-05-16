@@ -1,0 +1,18 @@
+Total obs 3000500, of which:
+ missing FFMV 74451, missing Price 69447, missing only price 0
+Share EU
+Number of companies with nonzero weights 252
+Minimum share 0.10, number of companies 139
+Minimum share 0.15, number of companies 90
+Share EU plus
+Number of companies with nonzero weights 276
+Minimum share 0.10, number of companies 211
+Minimum share 0.15, number of companies 164
+Share US
+Number of companies with nonzero weights 472
+Minimum share 0.90, number of companies 168
+Minimum share 0.95, number of companies 146
+Share US-plus
+Number of companies with nonzero weights 491
+Minimum share 0.90, number of companies 175
+Minimum share 0.95, number of companies 150
