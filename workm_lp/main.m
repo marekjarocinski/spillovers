@@ -2,40 +2,40 @@
 % Make latex tables and plots.
 clear all, close all
 
+%%%%% Preamble %%%%%
 % determine the shocks to use (uncomment one)
 shockspec = 'ecb_mpd_me_njt'; % ECB shocks
 % shockspec = 'fed_gssipa_me_99njt'; % Fed shocks
 % shockspec = 'macro_releases'; % Macro release surprises
 
 % determine the shock type to use (uncomment one)
-%shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
 shocktype = 'median'; Xnames = {'MP_median','CBI_median'};
+%shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
 %shocktype = 'q25'; Xnames = {'MP_q25','CBI_q25'};
 %shocktype = 'q75'; Xnames = {'MP_q75','CBI_q75'};
-%shocktype = 'q10'; Xnames = {'MP_q10','CBI_q10'};
-%shocktype = 'q90'; Xnames = {'MP_q90','CBI_q90'};
 %shocktype = 'surp'; Xnames = {'pc1eon1_me_njt'};
 %shocktype = 'z_ea_unemp'; Xnames = {shocktype};
 %shocktype = 'z_ea_bcs_confind'; Xnames = {shocktype};
 
 % determine the list of right-hand side variables (uncomment one)
 varlist = {'sveny01_d','bund1y_d'};
+% varlist = {'sveny01_d','bund1y_d','sveny10_d','bund10y_d'};
 % varlist = {'sveny01_d','sveny10_d','sp500_d','bofaml_us_hyld_oas_d',...
-%     'logvix_d','eurusd_d','broadexea_usd_d'};
+%     'eurusd_d','broadexea_usd_d'};
 % varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
-%     'logvstoxx_d','eurusd_d','broadexea_usd_d'};
-% varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d','sp500geo_eu0wus0w_d',...
-%     'sp500fin_d', 'sp500exfin_d', 'spr_sp500_finexfin_d',...
-%     'willsmlcap_d', 'willlrgcap_d', 'spr_will_smllrgcap_d'};
+%     'eurusd_d','broadexea_usd_d'};
+% varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+%       'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+% varlist = {'ffn_d','ff3_d','ff6_d'};
 
-%%%%% The remaining lines do not need to be modified. %%%%%
+%%%%% End of the preamble %%%%%
 %% Load and merge datasets
 % shocks
 switch shockspec
     case {'ecb_mpd_me_njt','fed_gssipa_me_99njt'}
         tabs = readtable("../data/shocks/shocks/shocks_"+shockspec+"_d.csv");
     case 'macro_releases'
-        tabs = readtable('../data/shocks/macro_releases/z_ea.csv');
+        tabs = readtable('../data/shocks/data/z_ea.csv');
         tabs{:,2:end} = tabs{:,2:end}/100;
 end
 if not(ismember('date', tabs.Properties.VariableNames))
@@ -54,6 +54,8 @@ clear tabs tabd
 % sample
 %tab(logical(tab.d_fedtightcycle),:) = [];
 %tab(~logical(tab.d_usarecdm),:) = [];
+%tab(tab.date>datetime(2008,12,16) & tab.date<datetime(2015,12,15),:) = [];
+%tab(tab.date>datetime(2008,12,16),:) = [];
 
 outdir = shockspec+"/";
 mkdir(outdir);

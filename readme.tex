@@ -25,45 +25,358 @@
 
 \setlength\parindent{0pt}
 
+\usepackage{etoolbox}
+\makeatletter
+\preto{\@verbatim}{\topsep=0pt \partopsep=0pt }
+\makeatother
+
 \begin{document}
 
-\textbf{\Large Replication files for: ``Central Bank Information Effects and Transatlantic Spillovers,'' by Marek Jaroci\'nski}\medskip
+\textbf{\Large Replication files for: ``Central Bank Information Effects and Transatlantic Spillovers'' by Marek Jaroci\'nski,\\\today}\medskip
 
 
-This Readme file gives an overview of the folder tree and indicates which programs to run in order to replicate the results in the paper. Further instructions are provided within each program.
+This Readme file gives an overview of the folder tree and provides instructions to replicate each table and figure in the paper. The results in the paper were generated with Matlab R2021b.
 
 \section{Folders}
 
-\verb|data| - Source data and Stata and Matlab programs used for the construction of some derived variables, such as interest rate surprises, broad dollar excluding Euro, Europe-exposed stock index etc.
+\verb|data| - Source data and Stata and Matlab programs used for the construction of some derived variables, such as interest rate surprises, broad dollar excluding Euro, Europe-exposed and US-exposed stock indices.
 
-\verb|workm_lp| - Matlab programs that estimate local projections
+\verb|workm_lp| - Matlab programs that estimate local projections.
 
 \verb|workm_var| - Matlab programs that estimate Bayesian VARs.
 
 \section{Replicating the results in the paper}
 
-\subsection{Local projections}
+Some of the replication scripts start with a preamble enclosed between lines
+\begin{verbatim}
+%%%%% Preamble %%%%%
+...
+%%%%% End of the preamble %%%%% \end{verbatim}
+and containing lines of code commented out with \verb|%|. 
+Before running these scripts with Matlab, first uncomment the appropriate lines in the preamble, depending on the table/figure to be replicated. The following instructions provide, for each figure and table, the name of the script and, if needed, the lines to be uncommented. All the lines in the preamble that are not mentioned explicitly should remain commented.
 
-\subsubsection{Macroeconomic surprises and monetary policy shocks obtained with a fixed rotation}
+\subsection{Main paper}
 
-\verb|workm_lp/main.m| - Estimate local projections for macroeconomic surprises and monetary policy shocks obtained with a fixed rotation. Uncomment the lines as explained in the file to estimate different specifications. For example, to replicate Table 1 uncomment:\\
-\verb|shockspec = 'ecb_mpd_me_njt'; % ECB shocks| - to use ECB shocks\\
-\verb|shocktype = 'median';| - to use Median Rotation shocks\\
-\verb|varlist = {'sveny01_d','bund1y_d'};| - to include 1-year Treasury yield (sveny01\_d) and 1-year German Bund yield (bund1y\_d). The variable names are explained in the text file \verb|workm_lp/nicenames_d.json|.
+\paragraph{Figure 1:} Run the script
+\verb|data\shocks\plots_and_stats\main2.m|
 
-\subsubsection{Monetary policy shocks accounting for the uncertainty about the rotation}
+\paragraph{Figure 2:} Run the script
+\verb|workm_lp\main2.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt'; % ECB shocks
+varlist = {'sveny01_d','sveny10_d','sp500_d','bofaml_us_hyld_oas_d',...
+   'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
+Note that this will also compute and print out the results for the lines ``Share $\beta^{MP}$ significant'' and 
+``Share $\beta^{CBI}$ significant'' in Table 2. 
 
-\verb|workm_lp/main2.m| - Estimate local projections for monetary policy shocks accounting for the uncertainty about the rotation. Uncomment the appropriate lines analogously as  in \verb|workm_lp/main.m|.
+\paragraph{Figure 3:} Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_gdp';
+shocksrc = 'ecb';
+shockid = 'sgnm2';
+\end{verbatim}
 
-\subsection{Bayesian VARs}
+\paragraph{Figure 4:} Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'macro_releases'; % Macro release surprises
+shocktype = 'z_ea_bcs_confind'; Xnames = {shocktype};
+varlist = {'sveny01_d','sveny10_d','sp500_d','bofaml_us_hyld_oas_d',...
+   'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
 
-\verb|workm_var/main.m| - Estimate Bayesian VARs and plot impulse responses to shocks. Define the variables \verb|specid|, \verb|shocksrc| and \verb|shockid| choosing from the options explained in the file. For example, to obtain the impulse responses plotted in Figure 4 use:
+\paragraph{Figure 5:} Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'macro_releases'; % Macro release surprises
+shocktype = 'z_ea_unemp'; Xnames = {shocktype};
+varlist = {'sveny01_d','sveny10_d','sp500_d','bofaml_us_hyld_oas_d',...
+   'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
 
-\verb|specid = 'us_gdp';| - use the baseline list of variables (the variables are specified below in the program)
+\paragraph{Figure 6:} 
+1) Run the script
+\verb|workm_lp\main2.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt'; % ECB shocks
+varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+      'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+\end{verbatim}
+This will replicate the first column.
 
-\verb|shocksrc = 'ecb';| - use the ECB shocks
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'macro_releases'; % Macro release surprises
+shocktype = 'z_ea_bcs_confind'; Xnames = {shocktype};
+varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+      'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+\end{verbatim}
+This will replicate the second column.
 
-\verb|shockid = 'sgnm2';| - use the agnostic sign restrictions as in Jarocinski and Karadi (2020)
+3) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'macro_releases'; % Macro release surprises
+shocktype = 'z_ea_unemp'; Xnames = {shocktype};
+varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+      'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+\end{verbatim}
+This will replicate the third column.
+
+\paragraph{Figure 7:}
+1) Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_ff';
+shocksrc = 'ecb';
+shockid = 'sgnm2';
+\end{verbatim}
+This will replicate the first plot.
+
+2) Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_wx';
+shocksrc = 'ecb';
+shockid = 'sgnm2';
+\end{verbatim}
+This will replicate the second plot.
+
+3) Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_kr';
+shocksrc = 'ecb';
+shockid = 'sgnm2';
+\end{verbatim}
+This will replicate the third plot.
+
+\paragraph{Figure 8:}
+1) Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_gdp';
+shocksrc = 'fed';
+shockid = 'sgnm2';
+\end{verbatim}
+This will replicate the first column.
+
+2) Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'ea_gdp';
+shocksrc = 'ecb';
+shockid = 'sgnm2';
+\end{verbatim}
+This will replicate the second column.
+
+\paragraph{Figure 9:} Run the script
+\verb|workm_lp\main2.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'fed_gssipa_me_99njt';
+varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
+    'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
+
+\paragraph{Figure 10:} Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'ea_gdp';
+shocksrc = 'fed';
+shockid = 'sgnm2';
+\end{verbatim}
+
+\paragraph{Table 1:} 1) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt'; % ECB shocks
+shocktype = 'median'; Xnames = {'MP_median','CBI_median'};
+varlist = {'sveny01_d','bund1y_d'};
+\end{verbatim}
+This will replicate the results for the median shocks (the upper parts of both panels).
+
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt'; % ECB shocks
+shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
+varlist = {'sveny01_d','bund1y_d'};
+\end{verbatim}
+This will replicate the results for the ``simple'' (''poor man'') shocks (the lower parts of both panels).
+
+\paragraph{Table 2:} 1) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt'; % ECB shocks
+shocktype = 'q25'; Xnames = {'MP_q25','CBI_q25'};
+varlist = {'sveny01_d','bund1y_d'};
+\end{verbatim}
+This will replicate the results for the 25th percentile shocks (the upper part).
+
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt'; % ECB shocks
+shocktype = 'q75'; Xnames = {'MP_q75','CBI_q75'};
+varlist = {'sveny01_d','bund1y_d'};
+\end{verbatim}
+This will replicate the results for the 75th percentile shocks (the lower part).
+
+For replicating the lines ``Share $\beta^{MP}$ significant'' and 
+``Share $\beta^{CBI}$ significant'' see the instructions for Figure 2.
+
+\subsection{Online Appendix}
+
+\paragraph{Table A.1, Table A.2, Figure A.1:} Run the script
+\verb|data\shocks\plots_and_stats\main1.m|
+
+\paragraph{Table A.3, Figure A.2, A.3, A.4:} Run the script
+\verb|data\shocks\plots_pconf\main1.m| and
+\verb|data\shocks\plots_pconf\main2.m|
+
+\paragraph{Table B.1, Figure B.1: } Run the script
+\verb|data\shocks\plots_and_stats\main3.m|
+
+\paragraph{Table C.1:}
+1) Run the script
+\verb|workm_lp\main.m| uncommenting the lines\\
+\verb|shockspec = 'ecb_mpd_me_njt'; % ECB shocks|\\
+\verb|varlist = {'sveny01_d','bund1y_d','sveny10_d','bund10y_d'};|\\
+\verb|shocktype = 'surp'; Xnames = {'pc1eon1_me_njt'};|\\
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines\\
+\verb|shockspec = 'ecb_mpd_me_njt'; % ECB shocks|\\
+\verb|varlist = {'sveny01_d','bund1y_d','sveny10_d','bund10y_d'};|\\
+\verb|shocktype = 'median'; Xnames = {'MP_median','CBI_median'};|\\
+3) Run the script
+\verb|workm_lp\main.m| uncommenting the lines\\
+\verb|shockspec = 'ecb_mpd_me_njt'; % ECB shocks|\\
+\verb|varlist = {'sveny01_d','bund1y_d','sveny10_d','bund10y_d'};|\\
+\verb|shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};|\\
+
+\paragraph{Table C.2:}
+1) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt';
+shocktype = 'median'; Xnames = {'MP_median','CBI_median'};
+varlist = {'ffn_d','ff3_d','ff6_d'};
+\end{verbatim}
+This will replicate the results for the median shocks (the upper parts of all panels).
+
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt';
+shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
+varlist = {'ffn_d','ff3_d','ff6_d'};
+\end{verbatim}
+This will replicate the results for the ``simple'' (''poor man'') shocks (the lower parts of all panels).
+
+\paragraph{Table C.3:}
+1) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt';
+shocktype = 'median'; Xnames = {'MP_median','CBI_median'};
+varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
+    'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
+This will replicate the results for the median shocks (the upper parts of all panels).
+
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt';
+shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
+varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
+    'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
+This will replicate the results for the ``simple'' (''poor man'') shocks (the lower parts of all panels).
+
+\paragraph{Table C.4:} The same as Figure 4.
+
+\paragraph{Table C.5:} The same as Figure 5.
+
+\paragraph{Table C.6:} 
+Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt';
+shocktype = 'median'; Xnames = {'MP_median','CBI_median'};
+varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+      'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+\end{verbatim}
+This will replicate the results for the median shocks (the upper parts of all panels).
+
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'ecb_mpd_me_njt';
+shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
+varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+      'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+\end{verbatim}
+This will replicate the results for the ``simple'' (''poor man'') shocks (the lower parts of all panels).
+
+\paragraph{Table C.7:} The same as Figure 6, column 2.
+
+\paragraph{Table C.8:} The same as Figure 6, column 3.
+
+\paragraph{Table C.9:} 
+Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'fed_gssipa_me_99njt'; % Fed shocks
+shocktype = 'median'; Xnames = {'MP_median','CBI_median'};
+varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
+    'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
+This will replicate the results for the median shocks (the upper parts of all panels).
+
+2) Run the script
+\verb|workm_lp\main.m| uncommenting the lines
+\begin{verbatim}
+shockspec = 'fed_gssipa_me_99njt'; % Fed shocks
+shocktype = 'pm'; Xnames = {'MP_pm','CBI_pm'};
+varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
+    'eurusd_d','broadexea_usd_d'};
+\end{verbatim}
+This will replicate the results for the ``simple'' (''poor man'') shocks (the lower parts of all panels).
+
+
+\paragraph{Figure D.1:}
+Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_gdp';
+shocksrc = 'ecb';
+shockid = 'pm';
+\end{verbatim}
+
+
+\paragraph{Figure D.2:}
+Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'ea_gdp';
+shocksrc = 'ecb';
+shockid = 'sgnm2';
+\end{verbatim}
+
+\paragraph{Figure D.3:}
+Run the script
+\verb|workm_var\main.m| uncommenting the lines
+\begin{verbatim}
+specid = 'us_gdp';
+shocksrc = 'fed';
+shockid = 'sgnm2';
+\end{verbatim}
+
+
 
 %\bibliographystyle{econ}
 %\bibliography{../text/spillovers}

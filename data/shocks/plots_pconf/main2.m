@@ -1,14 +1,14 @@
 % Plot the contributions of press conferences to the principal component
 clear all, close all
 
-tab_pr = readtable('../shocks_median_noncenteredpc/construct/surprises_fed_gss_pr_99njt_d.csv');
+tab_pr = readtable('../shocks/construct/surprises_fed_gss_pr_99njt_d.csv');
 tab_pr.date = datetime(tab_pr.year, tab_pr.month, tab_pr.day);
 for i = 2:size(tab_pr,2)
     tab_pr.Properties.VariableNames{i} = strrep(tab_pr.Properties.VariableNames{i}, '_hf', '_pr');
 end
 
 
-tab_me = readtable('../shocks_median_noncenteredpc/construct/surprises_fed_gssipa_me_99njt_d.csv');
+tab_me = readtable('../shocks/construct/surprises_fed_gssipa_me_99njt_d.csv');
 tab_me.date = datetime(tab_me.year, tab_me.month, tab_me.day);
 for i = 2:size(tab_me,2)
     tab_me.Properties.VariableNames{i} = strrep(tab_me.Properties.VariableNames{i}, '_hf', '_me');

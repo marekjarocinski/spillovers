@@ -2,25 +2,28 @@
 % Make latex tables and plots.
 clear all, close all
 
+%%%%% Preamble %%%%%
 % determine the shocks to use (uncomment one)
 shockspec = 'ecb_mpd_me_njt';
 % shockspec = 'fed_gssipa_me_99njt';
 
 % determine the list of right-hand side variables (uncomment one)
-varlist = {'sveny01_d','sveny10_d','sp500_d','bofaml_us_hyld_oas_d',...
-    'logvix_d','eurusd_d','broadexea_usd_d'};
+varlist = {'bund1y_d'};
+% varlist = {'sveny01_d','sveny10_d','sp500_d','bofaml_us_hyld_oas_d',...
+%     'eurusd_d','broadexea_usd_d'};
 % varlist = {'bund1y_d','bund10y_d','stoxx50_d','bofaml_ea_hyld_oas_d',...
-%     'logvstoxx_d','eurusd_d','broadexea_usd_d'};
-% varlist = {'sp500geo_eu0wus0w_d','spr_sp500_finexfin_d','spr_will_smllrgcap_d'};
-% varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d'};
+%     'eurusd_d','broadexea_usd_d'};
+% varlist = {'sp500geo_eu0w_d','sp500geo_us0w_d',...
+%       'sp500fin_d', 'sp500exfin_d','willsmlcap_d', 'willlrgcap_d'};
+varlist = {'ffn_d','ff3_d','ff6_d'};
+%%%%% End of the preamble %%%%%
 
-%%%%% The remaining lines do not need to be modified. %%%%%
 approach = 'hc'; % 'bayesian' or 'hc'
 shocktype = 'sgnm2';
 ndraws = 2000;
 ntry = 100; % maximum number of rotations to try
 qtoplot = [0.5 0.16 0.84 0.05 0.95];
-
+rotation_grid = linspace(1e-3, 1-1e-3, ndraws);
 %% Load and merge datasets
 % shocks
 tabs = readtable("../data/shocks/shocks/shocks_"+shockspec+"_d.csv");
@@ -51,7 +54,7 @@ fnames = strings(length(varlist),1);
 for vv = 1:length(varlist)
     varname = varlist{vv};
 
-    rowNames = {'b1','s1','b2','s2','blah1','blah2','N.obs.'};
+    rowNames = {'b1','s1','b2','s2','nb1*','nb2*','N.obs.'};
     restab = table('Size', [length(rowNames) 0], 'RowNames', rowNames);
     toplot1 = nan(length(hstrings), length(qtoplot));
     toplot2 = nan(length(hstrings), length(qtoplot));
@@ -63,25 +66,30 @@ for vv = 1:length(varlist)
 
         % drawing shocks, then drawing coefs|shocks
         coefs_draws = nan(ndraws,K);
+        zstats_draws = nan(ndraws,2);
 
         for ii = 1:ndraws
-
+            
             % 1. draw shocks
-            % 1.1 find a rotation
-            for jj = 1:ntry
-                [PP,temp] = qr(randn(2,2)); % draw PP
-                % flip P so the signs of i are positive
-                toflip = PP(1,:)*RR(1,1)<0;
-                PP(:,toflip) = -PP(:,toflip);
-                % check the signs of s
-                CCtil = PP'*RR;
-                if CCtil(1,2)<0 && CCtil(2,2)>0
-                    break
+            if 0 % draw randomly
+                % 1.1 find a rotation
+                for jj = 1:ntry
+                    [PP,temp] = qr(randn(2,2)); % draw PP
+                    % flip P so the signs of i are positive
+                    toflip = PP(1,:)*RR(1,1)<0;
+                    PP(:,toflip) = -PP(:,toflip);
+                    % check the signs of s
+                    CCtil = PP'*RR;
+                    if CCtil(1,2)<0 && CCtil(2,2)>0
+                        break
+                    end
                 end
+                % 1.2 normalize, so shocks add up to 1
+                DD = diag(CCtil(:,1));
+                UU = QQ*PP*DD;
+            else % go over shocks on the grid: converges faster
+                UU = signrestr_median(M, rotation_grid(ii));
             end
-            % 1.2 normalize, so shocks add up to 1
-            DD = diag(CCtil(:,1));
-            UU = QQ*PP*DD;
 
 
             % drop missing observations
@@ -99,19 +107,25 @@ for vv = 1:length(varlist)
                     sig2draw = 1/gamrnd(0.5*(T-K), 2/shat);
                     Qpost = (X'*X)\eye(K)*sig2draw;
                     bdraw = bhat + chol(Qpost,'lower')*randn(K,1);
+                    zstats = bhat(1:2)./sqrt(diag(Qpost(1:2,1:2)));
                 case 'hc'
                     mdl = fitlm(X,y,'Intercept',false);
                     [EHWcov,EHWse,coeff] = hac(mdl, 'type', 'HC', 'display', 'off');
                     bdraw = coeff + chol(EHWcov,'lower')*randn(K,1);
+                    zstats = coeff(1:2)./EHWse(1:2);
             end
 
             coefs_draws(ii,:) = bdraw';
+            zstats_draws(ii,:) = zstats';
         end
 
         toplot1(hh,:) = quantile(coefs_draws(:,1), qtoplot);
         toplot2(hh,:) = quantile(coefs_draws(:,2), qtoplot);
 
-        res_h = [mean(coefs_draws(:,1)), std(coefs_draws(:,1)), mean(coefs_draws(:,2)), std(coefs_draws(:,2)), 0, 0, T];
+        pval = 2*normcdf(abs(zstats_draws), 'upper');
+        issignificant10 = sum(pval<0.1)/ndraws;
+
+        res_h = [mean(coefs_draws(:,1)), std(coefs_draws(:,1)), mean(coefs_draws(:,2)), std(coefs_draws(:,2)), issignificant10, T];
 
         restab = addvars(restab, res_h', 'NewVariableNames', yname);
     end
@@ -167,5 +181,3 @@ if 0
         exportgraphics(fh, fnames(vv))
     end
 end
-
-

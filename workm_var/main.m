@@ -1,6 +1,7 @@
 % Estimate VAR irfs
 clear all, close all
 
+%%%%% Preamble %%%%%
 % determine the list of variables in the VAR
 specid = 'us_gdp'; % us_gdp or us_wx or us_kr or ea_gdp or ea_wx or ea_kr
 
@@ -13,7 +14,7 @@ shockid = 'sgnm2'; % sign restrictions with uniform prior on rotations (default)
 %shockid = 'pm'; % poor man / simple shocks
 %shockid = 'med'; % median rotation sign restrictions
 
-%%%%% The remaining lines do not need to be modified. %%%%%
+%%%%% End of the preamble %%%%%
 
 spl = timerange('1999-01-01','2019-06-01','months');
 

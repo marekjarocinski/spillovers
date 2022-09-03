@@ -10,9 +10,9 @@ cbi_median_ecb = tab_ecb.CBI_median*100;
 tab_ecb = table(date, mp_pm_ecb, cbi_pm_ecb, mp_median_ecb, cbi_median_ecb);
 tab_ecb(tab_ecb.date>datetime(2019,6,6),:) = [];
 disp('ECB shocks pm')
-summary_stats(tab_ecb{:,2:3})
+summary_stats(tab_ecb{:,2:3}, 'MP-pm', 'CBI-pm')
 disp('ECB shocks median')
-summary_stats(tab_ecb{:,4:5})
+summary_stats(tab_ecb{:,4:5}, 'MP-med', 'CBI-med')
 
 tab_fed = readtable('../shocks/shocks_fed_gssipa_me_99njt_d.csv');
 date = datetime(tab_fed.year, tab_fed.month, tab_fed.day);
@@ -22,9 +22,9 @@ mp_median_fed = tab_fed.MP_median*100;
 cbi_median_fed = tab_fed.CBI_median*100;
 tab_fed = table(date, mp_pm_fed, cbi_pm_fed, mp_median_fed, cbi_median_fed);
 disp('Fed shocks pm')
-summary_stats(tab_fed{:,2:3})
+summary_stats(tab_fed{:,2:3}, 'MP-pm', 'CBI-pm')
 disp('Fed shocks median')
-summary_stats(tab_fed{:,4:5})
+summary_stats(tab_fed{:,4:5}, 'MP-med', 'CBI-med')
 
 % check for joint announcements
 tab0 = innerjoin(tab_ecb, tab_fed)
@@ -53,7 +53,7 @@ ylabel('cumulated shocks (percent)')
 exportgraphics(fh, 'cumulated_cbi_median.pdf')
 
 
-% correlation between the Fed shock and the most recent ECB surprise
+% correlation between the Fed shock and the most recent ECB shock
 tab_lag = tab;
 tab_lag{1,2:end} = NaN;
 tab_lag{2:end,2:end} = tab{1:end-1,2:end};
@@ -68,7 +68,7 @@ fprintf("correlation between the Fed shock and the most recent ECB shock & %0.2f
     R(3,1), P(3,1), R(4,2), P(4,2), size(X,1));
 
 
-% correlation between the Fed surprise and the subsequent ECB surprise
+% correlation between the Fed shock and the subsequent ECB shock
 tab_lead = tab;
 tab_lead{1:end-1,2:end} = tab{2:end,2:end};
 tab_lead{end,2:end} = NaN;
@@ -79,5 +79,5 @@ X = X(~isnan(sum(X,2)),:);
 X1 = X(X(:,1)>-40,:);
 [R1, P1] = corr(X1)
 
-fprintf("correlation between the Fed surprise and the subsequent ECB shock & %0.2f & (%0.2f) & %0.2f & (%0.2f) & %d \\\\\n",...
+fprintf("correlation between the Fed shock and the subsequent ECB shock & %0.2f & (%0.2f) & %0.2f & (%0.2f) & %d \\\\\n",...
     R(3,1), P(3,1), R(4,2), P(4,2), size(X,1));

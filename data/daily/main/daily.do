@@ -21,11 +21,10 @@ rename bamlc0a4cbbb bofaml_us_bbb_oas
 rename bamlc0a4cbbbey bofaml_us_bbb_yld
 rename bamlh0a0hym2 bofaml_us_hyld_oas
 rename bamlhe00ehyioas bofaml_ea_hyld_oas
-gen logvix = ln(vixcls)
 foreach var of varlist will* {
     replace `var'=100*ln(`var')
 }
-keep date *hyld* logvix
+keep date *hyld*
 save "daily_Daily_Close.dta", replace
 
 * zero coupon yields by Gurkaynak, Sack, Wright (2006) from
@@ -79,30 +78,10 @@ format date %td
 sort date
 destring v2-v7, replace force
 gen stoxx50 = 100*ln(v2)
-rename v3 vstoxx
-gen logvstoxx = ln(vstoxx)
-rename v4 vix_ds_eur
-gen logvix_ds_eur = ln(vix_ds_eur)
-rename v5 vix_bl
-gen logvix_bl = ln(vix_bl)
-rename v6 vix_ds
-gen logvix_ds = ln(vix_ds)
 gen sp500 = 100*ln(v7)
 gen spr_stoxx50sp500 = stoxx50 - sp500
-drop v1 v2 v7
-keep date sp500 stoxx50 logvstoxx spr_
+keep date sp500 stoxx50 spr_
 save sdw_stocks.dta, replace
-
-
-* CISS daily from Manfred Kremer
-import excel using "EA_US_CISS_daily.xlsx", sheet("Sheet1") firstrow clear
-gen date = date(A,"YMD"), before (A)
-format date %td
-drop A
-rename EACISSDAILY ciss_ea
-rename USCISSDAILY ciss_us
-save "EA_US_CISS_daily.dta", replace
-
 
 import excel using "indices_bloomberg_2.xlsx", sheet("Data") cellrange(A9) clear
 rename A date
@@ -130,6 +109,16 @@ use ../sp500geo/sp500geo.dta, clear
 keep date sp500geo_eu0w sp500geo_us0w sp500geo_eu0wus0w
 save sp500geo.dta, replace
 
+* Fed funds futures (from Haver)
+import excel using haver_fff.xlsx, cellrange(A14) clear
+gen date = date(A,"DMY",2050), before(A)
+format date %td
+drop A
+rename B ffn
+rename C ff3
+rename D ff6
+save haver_fff.dta, replace
+
 * merge
 use "daily_Daily_Close.dta", clear
 erase "daily_Daily_Close.dta"
@@ -147,14 +136,14 @@ merge 1:1 date using "sdw_usdeur.dta", nogenerate
 erase "sdw_usdeur.dta"
 merge 1:1 date using "sdw_stocks.dta", nogenerate
 erase "sdw_stocks.dta"
-merge 1:1 date using "EA_US_CISS_daily.dta", nogenerate
-erase "EA_US_CISS_daily.dta"
 merge 1:1 date using "indices_bloomberg_2.dta", nogenerate
 erase "indices_bloomberg_2.dta"
 merge 1:1 date using "broadexeuro.dta", nogenerate
 erase "broadexeuro.dta"
 merge 1:1 date using "sp500geo.dta", nogenerate
 erase "sp500geo.dta"
+merge 1:1 date using "haver_fff.dta", nogenerate
+erase "haver_fff.dta"
 
 sort date
 keep if year(date)>=1990 & year(date)<2020

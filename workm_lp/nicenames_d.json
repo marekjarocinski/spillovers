@@ -2,7 +2,6 @@
 "sveny01_d": "1-year Treasury yield",
 "sveny10_d": "10-year Treasury yield",
 "sp500_d": "SP500",
-"logvix_d": "log VIX",
 "usdeur_d": "USD per EUR",
 "eurusd_d": "EUR per USD",
 "broadexea_usd_d": "Broad dollar ex EUR",
@@ -11,7 +10,6 @@
 "stoxx50_d": "Euro Stoxx 50",
 "bofaml_us_hyld_oas_d": "High yield corporate bond OAS (US)",
 "bofaml_ea_hyld_oas_d": "High yield corporate bond OAS (EA)",
-"logvstoxx_d": "log VSTOXX",
 "spr_stoxx50sp500_d": "Euro Stoxx 50 - SP500",
 "sp500geo_eu0w_d": "Europe-exposed",
 "sp500geo_us0w_d": "US-exposed",
@@ -22,5 +20,8 @@
 "will5000ind_d": "Wilshire 5000",
 "willsmlcap_d": "Wilshire US Small-Cap",
 "willlrgcap_d": "Wilshire US Large-Cap",
-"spr_will_smllrgcap_d": "Wilshire US Small-Cap - Large-Cap"
+"spr_will_smllrgcap_d": "Wilshire US Small-Cap - Large-Cap",
+"ffn_d": "Fed funds futures next FOMC",
+"ff3_d": "Fed funds futures 3m",
+"ff6_d": "Fed funds futures 6m"
 }

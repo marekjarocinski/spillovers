@@ -16,7 +16,7 @@ fprintf('Data from %s to %s, T=%d\n', tab{1,'date'},tab{end,'date'},size(tab,1))
 
 
 % Load fed_ipa_pc
-tab_pc = readtable('../data_ipa/fed_ipa_pc_abgmrstyle.csv');
+tab_pc = readtable('../data/fed_ipa_pc_abgmrstyle.csv');
 tab_pc.date = datetime(tab_pc.date,'InputFormat','ddMMMyyyy');
 tab_pc.release_type = [];
 for i = 2:size(tab_pc,2)
