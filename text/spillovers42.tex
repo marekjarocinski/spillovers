@@ -47,7 +47,13 @@ This is a revised version of the paper ``International spillovers of the Fed and
 \maketitle
 
 \begin{abstract}
-News about the economy contained in a central bank announcement can affect public expectations. This paper shows, using both event studies and vector autoregressions, that such central bank information effects are an important channel of the transatlantic spillover of monetary policy. They account for a part of the co-movement of German and US government bond yields around Fed policy announcements, and for most of this co-movement around ECB policy announcements, explaining the puzzling responses of US variables.
+News about the economy contained in a central bank announcement can affect public expectations. This paper shows, using both event studies and vector autoregressions, that such central bank information effects are an important channel of the transatlantic spillover of monetary policy. They account for a part of the co-movement of German and US government bond yields around Fed policy announcements,
+and for most of this co-movement around ECB policy announcements.
+Consequently, ECB surprise interest rate hikes that spill over to US government bond yields are followed on average by easier, not tighter, US financial conditions and an economic expansion.
+In fact, they spill over similarly as positive European macroeconomic news surprises.
+By contrast, ECB pure ``monetary policy shocks'' do not spill over,
+in part because of the offsetting Fed policy response.
+
 
 \bigskip
 
@@ -170,7 +176,7 @@ to the state of the economy.
 Therefore, the surprise is exogenous to this systematic response and, hence, useful for isolating the causal effects of the central bank communication and action.
 The use of surprises for identification goes back at least to \cite{Kuttner_2001}. I
 take the ECB surprises from the dataset of \cite{Altavilla_etal_2019}
-and the Fed surprises from the dataset of \cite{Gurkaynak_Sack_Swanson_2005a} updated by \cite{Gurkaynak_Karasoy_Lee_2021} and
+and the Fed surprises from the dataset of \cite{Gurkaynak_Sack_Swanson_2005a} updated by \cite{Gurkaynak_Karasoy_Lee_2022} and
 complemented to include also the effect of the Fed press conferences (as in the \citealt{Altavilla_etal_2019} dataset).
 Since the focus of this paper is on the transatlantic spillovers, I drop simultaneous policy announcements
 by the Fed and the ECB.
@@ -181,7 +187,7 @@ I use the surprises in the ``Monetary Event'' window: a half-hour window around 
 The EA-MPD vintage used in this paper contains 264 announcements from 7 January 1999 to 6 June 2019. I drop three coordinated, same-day policy announcements by the Fed and the ECB: on 13 and 17 September 2001 and on 8 October 2008. This leaves 261 ECB announcements.
 
 The Fed surprises are based on the \cite{Gurkaynak_Sack_Swanson_2005a} (GSS) database
-updated until June 2019 by \cite{Gurkaynak_Karasoy_Lee_2021}
+updated until June 2019 by \cite{Gurkaynak_Karasoy_Lee_2022}
 and adjusted to reflect also the Fed press conferences.
 The GSS data contain the surprises in a half-hour window around the press releases.
 Therefore, on the days when a press conference was also held I take the sum of the GSS surprise and the surprise in the press conference window.
@@ -896,7 +902,7 @@ Euro Stoxx 50 index change in the Monetary Event window in percentage points. Id
 The first principal component of the Monetary Event Window changes in 
 the current-month and three-month-ahead federal
 funds futures contracts and changes in the second, third, and fourth eurodollar futures contracts,
-which have 1.5, 2.5, and 3.5 quarters to expiration on average (Identifiers: MP1, FF4, ED2, ED3, ED4).\footnote{See footnote \ref{footnote:pc}.} Surprises in the Monetary Event Window are obtained by adding up the surprise in the \emph{Press Release window} and the surprise in the \emph{Press Conference window}, whenever there is one. \emph{Sources:} Surprises in the Press Release window, starting 10 minutes before the press release and ending 20 minutes afterwards, come from the \cite{Gurkaynak_Sack_Swanson_2005a} database updated until June 2019 by \cite{Gurkaynak_Karasoy_Lee_2021} and available in their replication files at \url{http://www.bilkent.edu.tr/~refet/GKL_replication.zip}. Surprises in the Press Conference window, starting 10 minutes before the press conference and ending 15 minutes after the end of the press conference, come from the Thomson Reuters Tick History Database. See Section \ref{sec: Fed press conf} for more details on the surprises in the Press Conference window.
+which have 1.5, 2.5, and 3.5 quarters to expiration on average (Identifiers: MP1, FF4, ED2, ED3, ED4).\footnote{See footnote \ref{footnote:pc}.} Surprises in the Monetary Event Window are obtained by adding up the surprise in the \emph{Press Release window} and the surprise in the \emph{Press Conference window}, whenever there is one. \emph{Sources:} Surprises in the Press Release window, starting 10 minutes before the press release and ending 20 minutes afterwards, come from the \cite{Gurkaynak_Sack_Swanson_2005a} database updated until June 2019 by \cite{Gurkaynak_Karasoy_Lee_2022} and available in their replication files at \url{http://www.bilkent.edu.tr/~refet/GKL_replication.zip}. Surprises in the Press Conference window, starting 10 minutes before the press conference and ending 15 minutes after the end of the press conference, come from the Thomson Reuters Tick History Database. See Section \ref{sec: Fed press conf} for more details on the surprises in the Press Conference window.
 The first principal component is rescaled so that its variance equals that of
 the changes in the fourth eurodollar futures contract in the Monetary Event window.
 \item

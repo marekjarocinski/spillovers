@@ -52,10 +52,7 @@ tab = join(tabs, tabd, 'Keys', {'date'});
 clear tabs tabd
 
 % sample
-%tab(logical(tab.d_fedtightcycle),:) = [];
-%tab(~logical(tab.d_usarecdm),:) = [];
 %tab(tab.date>datetime(2008,12,16) & tab.date<datetime(2015,12,15),:) = [];
-%tab(tab.date>datetime(2008,12,16),:) = [];
 
 outdir = shockspec+"/";
 mkdir(outdir);
